@@ -45,11 +45,12 @@ public class Player : MonoBehaviour
 
     private void HandleKeyPressed(InputAction.CallbackContext context)
     {
+        AudioManager.Instance.PlaySound(context.control.displayName);
         _notes.Enqueue(_keyToNote[context.control.displayName]);
         if (_notes.Count == 3)
         {
             string chords = string.Concat(_notes);
-            Debug.Log("SpellLaunched: " + chords);
+            Debug.Log("Chords: " + chords);
             _notes.Clear();
             if (_spells.ContainsKey(chords))
             {

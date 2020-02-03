@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class AudioManager : MonoSingleton<AudioManager>
 {
+    [SerializeField] private AudioClip Do;
+    [SerializeField] private AudioClip Re;
+    [SerializeField] private AudioClip Mi;
+    [SerializeField] private AudioClip Fa;
+    [SerializeField] private AudioClip Sol;
+    [SerializeField] private AudioClip La;
+    [SerializeField] private AudioClip Si;
+    [SerializeField] private AudioClip Doo;
     [SerializeField] private AudioClip DoMiSolChords;
     [SerializeField] private AudioClip FailureJingle;
     private Dictionary<string, AudioClip> clips;
@@ -19,6 +27,14 @@ public class AudioManager : MonoSingleton<AudioManager>
 
         clips = new Dictionary<string, AudioClip>
         {
+            { "A", Do },
+            { "Z", Re },
+            { "E", Mi },
+            { "R", Fa },
+            { "Q", Sol },
+            { "S", La },
+            { "D", Si },
+            { "F", Doo },
             { "DoMiSolChords", DoMiSolChords },
             { "FailureJingle", FailureJingle },
         };
