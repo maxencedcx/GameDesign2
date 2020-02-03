@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
         _controls = new Controls();
         _notes = new Queue<string>();
         _spells = new Dictionary<string, System.Action>();
-        _spells.Add("DoReMi", SpellTest);
+        _spells.Add("DoMiSol", SpellTest);
         //add chords and corresponding spells
 
         _keyToNote = new Dictionary<string, string>
@@ -52,7 +52,10 @@ public class Player : MonoBehaviour
             Debug.Log("SpellLaunched: " + chords);
             _notes.Clear();
             if (_spells.ContainsKey(chords))
+            {
+                AudioManager.Instance.PlaySound(chords + "Chords");
                 _spells[chords]();
+            }
             else
                 SpellIncorrect();
         }
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour
     private void SpellIncorrect()
     {
         //play bad chords sound
+        AudioManager.Instance.PlaySound("FailureJingle");
         Debug.Log("INCORRECT SPELL");
     }
 }
