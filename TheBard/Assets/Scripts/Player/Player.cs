@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
         _notes = new Queue<string>();
         _spells = new Dictionary<string, System.Action>();
         _spells.Add("DoReMi", SpellTest);
+        //add chords and corresponding spells
 
         _keyToNote = new Dictionary<string, string>
         {
@@ -33,43 +34,39 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         _controls.InGameBard.PressKey.performed += HandleKeyPressed;
-        _controls.InGameBard.PressSpace.performed += SpellLaunched;
         _controls.InGameBard.Enable();
     }
 
     private void OnDisable()
     {
         _controls.InGameBard.PressKey.performed -= HandleKeyPressed;
-        _controls.InGameBard.PressSpace.performed -= SpellLaunched;
         _controls.InGameBard.Disable();
     }
 
     private void HandleKeyPressed(InputAction.CallbackContext context)
     {
-        //Debug.Log("keyPressed " + context.control.displayName);
         _notes.Enqueue(_keyToNote[context.control.displayName]);
-        if (_notes.Count > 3)
-            _notes.Dequeue();
-    }
-
-    private void SpellLaunched(InputAction.CallbackContext context)
-    {
-        string chords = string.Concat(_notes);
-        Debug.Log("SpellLaunched: " + chords);
-        _notes.Clear();
-        if (_spells.ContainsKey(chords))
-            _spells[chords]();
-        else
-            SpellIncorrect();
+        if (_notes.Count == 3)
+        {
+            string chords = string.Concat(_notes);
+            Debug.Log("SpellLaunched: " + chords);
+            _notes.Clear();
+            if (_spells.ContainsKey(chords))
+                _spells[chords]();
+            else
+                SpellIncorrect();
+        }
     }
 
     private void SpellTest()
     {
+        //play good chords sound
         Debug.Log("Spell called!");
     }
 
     private void SpellIncorrect()
     {
+        //play bad chords sound
         Debug.Log("INCORRECT SPELL");
     }
 }

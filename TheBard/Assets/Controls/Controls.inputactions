@@ -12,14 +12,6 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
-                },
-                {
-                    "name": "PressSpace",
-                    "type": "Button",
-                    "id": "8c087e01-4f7d-4379-98bd-f225693a293b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -70,7 +62,7 @@
                 {
                     "name": "",
                     "id": "7aa816e0-795e-489a-93fc-3af338fdfd1e",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/a",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "",
@@ -108,17 +100,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "PressKey",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7175813f-ce1b-4d10-9d63-2862d0e4532c",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PressSpace",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
