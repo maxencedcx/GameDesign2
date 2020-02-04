@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour, IEntity
 {
     [SerializeField] protected int maxHealth = 100;
+    [SerializeField] protected EntityType Type = EntityType.DEFAULT;
     public int Id { get; protected set; }
     protected int _health;
     virtual protected int Health
@@ -28,12 +29,17 @@ public class Entity : MonoBehaviour
     }
 
 
+    public void Init(int Id, EntityType type)
+    {
+        this.Id = Id;
+        this.Type = type;
+        GameManager.Instance.InGameObjects.AddEntity(Id, gameObject, type);
+    }
+
     public virtual void TakeDamage(int damage)
     {
-        Debug.Log("TakeDamage");
         if (damage > 0)
             Health -= damage;
-        Debug.Log(Health);
     }
 
     protected virtual void OnHealthChange(int value)
@@ -41,7 +47,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Die()
     {
-        Debug.Log(Id + " -- DEAD");
+        Debug.Log(Type.ToString() + Id + " -- DEAD");
         Destroy(gameObject);
     }
 

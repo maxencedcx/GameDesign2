@@ -19,8 +19,7 @@
         // PREFABS
         public const string prefabsPath = "Prefabs/";
         public const string playerPrefab = "playerPrefab";
-        public const string allyPrefab = "allyPrefab";
-        public const string enemyPrefab = "enemyPrefab";
+        public const string entityPrefab = "entityPrefab";
 
         // SOUNDS
         public const string soundsPath = "Sounds/";

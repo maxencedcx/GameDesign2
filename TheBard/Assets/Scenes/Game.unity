@@ -166,8 +166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1123640566113518795, guid: 2d1db00995cbc3c4f8c717350bc88771,
     type: 3}
-  allyPrefab: {fileID: 0}
-  enemyPrefab: {fileID: 5268993205352746573, guid: 296bee975d9c32b46b9aea03875b4bd1,
+  entityPrefab: {fileID: 5268993205352746573, guid: 296bee975d9c32b46b9aea03875b4bd1,
     type: 3}
 --- !u!1 &555061967
 GameObject:

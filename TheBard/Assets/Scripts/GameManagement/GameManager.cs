@@ -18,8 +18,8 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab));
         InGameObjects.setPlayer(player);
 
-        GameObject enemy = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.enemyPrefab));
-        enemy.GetComponent<Enemy>().Init(1);
+        GameObject enemy = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
+        enemy.GetComponent<Entity>().Init(1, EntityType.ENNEMY);
     }
 }
 
@@ -40,23 +40,27 @@ public class InGameObjects
         Player = player;
     }
 
-    public void AddAlly(int id, GameObject entity)
+    public void AddEntity(int id, GameObject entity, EntityType type)
     {
-        Allies.Add(id, entity);
+        if (type == EntityType.ALLY)
+            Allies.Add(id, entity);
+        else if (type == EntityType.ENNEMY)
+            Enemies.Add(id, entity);
     }
 
-    public void AddEnemy(int id, GameObject entity)
+    public Dictionary<int, IEntity> getAllAllies()
     {
-        Enemies.Add(id, entity);
+        Dictionary<int, IEntity> allAllies = new Dictionary<int, IEntity>();
+        foreach (KeyValuePair<int, GameObject> entry in Allies)
+            allAllies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
+        return allAllies;
     }
 
-    public Dictionary<int, GameObject> getAllAllies()
+    public Dictionary<int, IEntity> getAllEnemies()
     {
-        return Allies;
-    }
-
-    public Dictionary<int, GameObject> getAllEnemies()
-    {
-        return Enemies;
+        Dictionary<int, IEntity> allEnemies = new Dictionary<int, IEntity>();
+        foreach (KeyValuePair<int, GameObject> entry in Enemies)
+            allEnemies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
+        return allEnemies;
     }
 }

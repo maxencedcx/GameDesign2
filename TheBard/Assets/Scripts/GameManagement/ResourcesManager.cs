@@ -4,8 +4,7 @@ using UnityEngine;
 public class ResourcesManager : MonoSingleton<ResourcesManager>
 {
     [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject allyPrefab;
-    [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private GameObject entityPrefab;
 
     private Dictionary<string, GameObject> objects;
 
@@ -21,8 +20,7 @@ public class ResourcesManager : MonoSingleton<ResourcesManager>
         objects = new Dictionary<string, GameObject>
         {
             { Constants.Resources.playerPrefab, playerPrefab },
-            { Constants.Resources.allyPrefab, allyPrefab },
-            { Constants.Resources.enemyPrefab, enemyPrefab },
+            { Constants.Resources.entityPrefab, entityPrefab },
         };
     }
 
