@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-    [SerializeField] protected int maxHealth;
-    public int Id { get; private set; }
+    [SerializeField] protected int maxHealth = 100;
+    public int Id { get; protected set; }
     protected int _health;
     virtual protected int Health
     {
@@ -27,18 +27,13 @@ public class Entity : MonoBehaviour
         _health = maxHealth;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    { }
-
-    // Update is called once per frame
-    void Update()
-    { }
 
     public virtual void TakeDamage(int damage)
     {
+        Debug.Log("TakeDamage");
         if (damage > 0)
             Health -= damage;
+        Debug.Log(Health);
     }
 
     protected virtual void OnHealthChange(int value)
@@ -46,6 +41,7 @@ public class Entity : MonoBehaviour
 
     protected virtual void Die()
     {
+        Debug.Log(Id + " -- DEAD");
         Destroy(gameObject);
     }
 

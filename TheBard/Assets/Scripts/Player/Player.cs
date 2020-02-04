@@ -65,6 +65,8 @@ public class Player : MonoBehaviour
     private void SpellTest()
     {
         //play good chords sound
+        foreach (GameObject entity in GameManager.Instance.InGameObjects.getAllEnemies().Values)
+            entity.GetComponent<Entity>().TakeDamage(50);
         Debug.Log("Spell called!");
     }
 
