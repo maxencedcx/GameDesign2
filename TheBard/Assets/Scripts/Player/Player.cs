@@ -16,6 +16,13 @@ public class Player : MonoBehaviour
         _notes = new Queue<string>();
         _spells = new Dictionary<string, System.Action>();
         _spells.Add("DoMiSol", SpellTest);
+        _spells.Add("ReFaLa", SpellTest);
+        _spells.Add("MiSolSi", SpellTest);
+        _spells.Add("FaLaDo", SpellTest);
+        _spells.Add("SolSiRe", SpellTest);
+        _spells.Add("LaDoMi", SpellTest);
+        _spells.Add("SiReFa", SpellTest);
+        _spells.Add("MiSiRe", SpellTest);
         //add chords and corresponding spells
 
         _keyToNote = new Dictionary<string, string>
