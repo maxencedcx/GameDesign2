@@ -12,6 +12,13 @@ public class AudioManager : MonoSingleton<AudioManager>
     [SerializeField] private AudioClip Si;
     [SerializeField] private AudioClip Doo;
     [SerializeField] private AudioClip DoMiSolChords;
+    [SerializeField] private AudioClip ReFaLaChords;
+    [SerializeField] private AudioClip MiSolSiChords;
+    [SerializeField] private AudioClip FaLaDoChords;
+    [SerializeField] private AudioClip SolSiReChords;
+    [SerializeField] private AudioClip LaDoMiChords;
+    [SerializeField] private AudioClip SiReFaChords;
+    [SerializeField] private AudioClip MiSiReChords;
     [SerializeField] private AudioClip FailureJingle;
     private Dictionary<string, AudioClip> clips;
     private AudioSource audioSource;
@@ -36,6 +43,13 @@ public class AudioManager : MonoSingleton<AudioManager>
             { "D", Si },
             { "F", Doo },
             { "DoMiSolChords", DoMiSolChords },
+            { "ReFaLaChords", ReFaLaChords },
+            { "MiSolSiChords", MiSolSiChords },
+            { "FaLaDoChords", FaLaDoChords },
+            { "SolSiReChords", SolSiReChords },
+            { "LaDoMiChords", LaDoMiChords },
+            { "SiReFaChords", SiReFaChords },
+            { "MiSiReChords", MiSiReChords },
             { "FailureJingle", FailureJingle },
         };
 

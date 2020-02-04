@@ -47,6 +47,13 @@ public class InGameObjects
         else if (type == EntityType.ENNEMY)
             Enemies.Add(id, entity);
     }
+    public void RemoveEntity(int id, EntityType type)
+    {
+        if (type == EntityType.ALLY)
+            Allies.Remove(id);
+        else if (type == EntityType.ENNEMY)
+            Enemies.Remove(id);
+    }
 
     public Dictionary<int, IEntity> getAllAllies()
     {
