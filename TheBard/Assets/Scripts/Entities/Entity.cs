@@ -33,7 +33,7 @@ public class Entity : MonoBehaviour, IEntity
     {
         this.Id = Id;
         this.Type = type;
-        GameManager.Instance.InGameObjects.AddEntity(Id, gameObject, type);
+        GameManager.Instance.InGameObjects.AddEntity(Id, gameObject, Type);
     }
 
     public virtual void TakeDamage(int damage)
@@ -53,6 +53,7 @@ public class Entity : MonoBehaviour, IEntity
 
     private void OnDestroy()
     {
+        GameManager.Instance.InGameObjects.RemoveEntity(Id, Type);
         /*if (GameManager.Instance != null && GameManager.Instance.activeRound != null && !GameManager.Instance.activeRound.isGameOver())
         {
             Health = 0;
