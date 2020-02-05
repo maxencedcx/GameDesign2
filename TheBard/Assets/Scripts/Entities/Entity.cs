@@ -46,7 +46,6 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
-        Debug.LogError(GetComponent<SpriteRenderer>().color);
         StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.red, 0.5f, 0.1f));
     }
 
