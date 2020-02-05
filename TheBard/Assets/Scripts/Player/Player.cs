@@ -73,7 +73,7 @@ public class Player : MonoBehaviour
     {
         //play good chords sound
         foreach (IEntity entity in GameManager.Instance.InGameObjects.getAllEnemies().Values)
-            entity.TakeDamage(50);
+            entity.debuffAttackSpeed(2, 10);
         Debug.Log("Spell called!");
     }
 

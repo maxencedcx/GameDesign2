@@ -39,6 +39,19 @@ public class Entity : MonoBehaviour, IEntity
         }
     }
 
+    public void debuffAttackSpeed(int value, int duration)
+    {
+        //change attack speed
+        StartCoroutine(coroutineDebuffAttackSpeed(value, duration));
+    }
+
+    IEnumerator coroutineDebuffAttackSpeed(int value, int duration)
+    {
+        attackSpeed += value;
+        yield return new WaitForSeconds(duration);
+        attackSpeed -= value;
+    }
+
     public void Init(int Id, EntityType type)
     {
         this.Id = Id;

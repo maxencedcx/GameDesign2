@@ -13,4 +13,5 @@ public interface IEntity
 {
     void Init(int Id, EntityType type);
     void TakeDamage(int damage);
+    void debuffAttackSpeed(int value, int duration);
 }
