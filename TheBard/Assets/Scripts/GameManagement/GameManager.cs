@@ -19,7 +19,13 @@ public class GameManager : MonoSingleton<GameManager>
         InGameObjects.setPlayer(player);
 
         GameObject enemy = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
-        enemy.GetComponent<Entity>().Init(1, EntityType.ENNEMY);
+        enemy.GetComponent<IEntity>().Init(1, EntityType.ENNEMY);
+
+        GameObject ally = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
+        ally.GetComponent<IEntity>().Init(1, EntityType.ALLY);
+        ally.transform.position = new Vector3(-3, 0, 0);
+        ally.GetComponent<SpriteRenderer>().flipX = false;
+        Debug.Log(ally.transform);
     }
 }
 
