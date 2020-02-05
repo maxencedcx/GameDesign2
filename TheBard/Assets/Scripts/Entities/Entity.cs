@@ -6,6 +6,8 @@ public class Entity : MonoBehaviour, IEntity
 {
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected EntityType Type = EntityType.DEFAULT;
+    [SerializeField] protected int attackSpeed = 1;
+    private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
     virtual protected int Health
@@ -28,6 +30,14 @@ public class Entity : MonoBehaviour, IEntity
         _health = maxHealth;
     }
 
+    private void Update()
+    {
+        if (Time.time - lastAttack >= attackSpeed)
+        {
+            lastAttack = Time.time;
+            GetComponent<Animator>().Play("Knight_Attack");
+        }
+    }
 
     public void Init(int Id, EntityType type)
     {
