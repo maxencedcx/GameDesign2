@@ -6,7 +6,9 @@ public class Entity : MonoBehaviour, IEntity
 {
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected EntityType Type = EntityType.DEFAULT;
-    [SerializeField] protected int attackSpeed = 1;
+    [SerializeField] protected double attackSpeed = 1;
+    [SerializeField] protected int attackDamages = 10;
+    [SerializeField] protected bool isStunned = false;
     private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
@@ -32,24 +34,81 @@ public class Entity : MonoBehaviour, IEntity
 
     private void Update()
     {
-        if (Time.time - lastAttack >= attackSpeed)
+        if (Time.time - lastAttack >= attackSpeed && isStunned == false)
         {
             lastAttack = Time.time;
             GetComponent<Animator>().Play("Knight_Attack");
         }
     }
 
-    public void debuffAttackSpeed(int value, int duration)
+    public void debuffStun(bool stunned, int duration)
+    {
+        //stun
+        OnDebuff();
+        StartCoroutine(coroutineDebuffStun(stunned, duration));
+    }
+
+    IEnumerator coroutineDebuffStun(bool stunned, int duration)
+    {
+        isStunned = true;
+        yield return new WaitForSeconds(duration);
+        isStunned = false;
+    }
+
+    public void debuffAttackDamages(int value, int duration)
+    {
+        //change attack damages
+        OnDebuff();
+        StartCoroutine(coroutineDebuffAttackDamages(value, duration));
+    }
+
+    IEnumerator coroutineDebuffAttackDamages(int value, int duration)
+    {
+        attackDamages -= value;
+        yield return new WaitForSeconds(duration);
+        attackDamages += value;
+    }
+
+    public void buffAttackDamages(int value, int duration)
+    {
+        //change attack damages
+        OnBuff();
+        StartCoroutine(coroutineBuffAttackDamages(value, duration));
+    }
+
+    IEnumerator coroutineBuffAttackDamages(int value, int duration)
+    {
+        attackDamages += value;
+        yield return new WaitForSeconds(duration);
+        attackDamages -= value;
+    }
+
+    public void debuffAttackSpeed(double value, int duration)
     {
         //change attack speed
+        OnDebuff();
         StartCoroutine(coroutineDebuffAttackSpeed(value, duration));
     }
 
-    IEnumerator coroutineDebuffAttackSpeed(int value, int duration)
+    IEnumerator coroutineDebuffAttackSpeed(double value, int duration)
     {
         attackSpeed += value;
         yield return new WaitForSeconds(duration);
         attackSpeed -= value;
+    }
+
+    public void buffAttackSpeed(double value, int duration)
+    {
+        //change attack speed
+        OnBuff();
+        StartCoroutine(coroutineBuffAttackSpeed(value, duration));
+    }
+
+    IEnumerator coroutineBuffAttackSpeed(double value, int duration)
+    {
+        attackSpeed -= value;
+        yield return new WaitForSeconds(duration);
+        attackSpeed += value;
     }
 
     public void Init(int Id, EntityType type)
@@ -63,13 +122,30 @@ public class Entity : MonoBehaviour, IEntity
     {
         if (damage > 0)
             Health -= damage;
-        GetComponent<Animator>().Play("Knight_Attack");
+        //GetComponent<Animator>().Play("Knight_Attack");
+    }
+
+    public virtual void HealDamage(int heal)
+    {
+        if (heal > 0)
+            Health += heal;
+        //GetComponent<Animator>().Play("Knight_Attack");
     }
 
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
         StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.red, 0.5f, 0.1f));
+    }
+
+    protected virtual void OnDebuff()
+    {
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.yellow, 0.5f, 0.1f));
+    }
+
+    protected virtual void OnBuff()
+    {
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.blue, 0.5f, 0.1f));
     }
 
     protected virtual void Die()

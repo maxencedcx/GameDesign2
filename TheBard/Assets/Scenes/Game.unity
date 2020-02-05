@@ -333,6 +333,13 @@ MonoBehaviour:
   Si: {fileID: 8300000, guid: 3ded38b30e059b54d927e373d3bf42e0, type: 3}
   Doo: {fileID: 8300000, guid: 8fd524a6f164d0e45a37a2cb917ec9b3, type: 3}
   DoMiSolChords: {fileID: 8300000, guid: 1378decbdcf9ba54e867738c87ebe47c, type: 3}
+  ReFaLaChords: {fileID: 8300000, guid: c1bf5c6f470cced4fadf548de395bc6e, type: 3}
+  MiSolSiChords: {fileID: 8300000, guid: 969199e6b18a1c140bd6626577bb5e01, type: 3}
+  FaLaDoChords: {fileID: 8300000, guid: 4492f57c65dec9046b1840e2b5ce61bb, type: 3}
+  SolSiReChords: {fileID: 8300000, guid: 8c685cd67919ce243b093b6150e09236, type: 3}
+  LaDoMiChords: {fileID: 8300000, guid: 544b17a6d346e4b479b60875cce047e8, type: 3}
+  SiReFaChords: {fileID: 8300000, guid: e95dfea5eb30823408efe642d7a5c8cd, type: 3}
+  MiSiReChords: {fileID: 8300000, guid: d03262402ddd73a4a90d4df38d1c883c, type: 3}
   FailureJingle: {fileID: 8300000, guid: a0b2cbd0b2d91a44c9e071ce74a50668, type: 3}
 --- !u!4 &2140222433
 Transform:

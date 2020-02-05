@@ -13,5 +13,10 @@ public interface IEntity
 {
     void Init(int Id, EntityType type);
     void TakeDamage(int damage);
-    void debuffAttackSpeed(int value, int duration);
+    void HealDamage(int heal);
+    void debuffStun(bool stunned, int duration);
+    void debuffAttackSpeed(double value, int duration);
+    void debuffAttackDamages(int value, int duration);
+    void buffAttackSpeed(double value, int duration);
+    void buffAttackDamages(int value, int duration);
 }
