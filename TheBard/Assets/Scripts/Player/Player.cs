@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     private void DebuffStunSpell()
     {
         foreach (IEntity entity in GameManager.Instance.InGameObjects.getAllEnemies().Values)
-            entity.debuffStun(true, 2);
+            entity.debuffStun(2);
         Debug.Log("DebuffStunSpell called!");
     }
 

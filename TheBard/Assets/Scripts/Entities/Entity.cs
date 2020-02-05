@@ -8,7 +8,7 @@ public class Entity : MonoBehaviour, IEntity
     [SerializeField] protected EntityType Type = EntityType.DEFAULT;
     [SerializeField] protected double attackSpeed = 1;
     [SerializeField] protected int attackDamages = 10;
-    [SerializeField] protected bool isStunned = false;
+    [SerializeField] protected float stunnedFor = 0;
     private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
@@ -34,25 +34,22 @@ public class Entity : MonoBehaviour, IEntity
 
     private void Update()
     {
-        if (Time.time - lastAttack >= attackSpeed && isStunned == false)
+        if (stunnedFor > 0)
+        {
+            stunnedFor = Mathf.Clamp(stunnedFor - Time.deltaTime, 0, stunnedFor);
+        }
+        else if (Time.time - lastAttack >= attackSpeed)
         {
             lastAttack = Time.time;
             GetComponent<Animator>().Play("Knight_Attack");
         }
     }
 
-    public void debuffStun(bool stunned, int duration)
+    public void debuffStun(int duration)
     {
         //stun
         OnDebuff();
-        StartCoroutine(coroutineDebuffStun(stunned, duration));
-    }
-
-    IEnumerator coroutineDebuffStun(bool stunned, int duration)
-    {
-        isStunned = true;
-        yield return new WaitForSeconds(duration);
-        isStunned = false;
+        stunnedFor += duration;
     }
 
     public void debuffAttackDamages(int value, int duration)
@@ -122,6 +119,7 @@ public class Entity : MonoBehaviour, IEntity
     {
         if (damage > 0)
             Health -= damage;
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.red, 0.5f, 0.1f));
         //GetComponent<Animator>().Play("Knight_Attack");
     }
 
@@ -129,23 +127,23 @@ public class Entity : MonoBehaviour, IEntity
     {
         if (heal > 0)
             Health += heal;
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.green, 0.5f, 0.1f));
         //GetComponent<Animator>().Play("Knight_Attack");
     }
 
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
-        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.red, 0.5f, 0.1f));
     }
 
     protected virtual void OnDebuff()
     {
-        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.yellow, 0.5f, 0.1f));
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.yellow, 0.5f, 0.1f));
     }
 
     protected virtual void OnBuff()
     {
-        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), GetComponent<SpriteRenderer>().color, Color.blue, 0.5f, 0.1f));
+        StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.blue, 0.5f, 0.1f));
     }
 
     protected virtual void Die()
@@ -154,7 +152,7 @@ public class Entity : MonoBehaviour, IEntity
         Destroy(gameObject);
     }
 
-    IEnumerator FlashObject(SpriteRenderer toFlash, Color originalColor, Color flashColor, float flashTime, float flashSpeed)
+    IEnumerator FlashObject(SpriteRenderer toFlash, Color flashColor, float flashTime, float flashSpeed)
     {
         float flashingFor = 0;
         var newColor = flashColor;
@@ -165,11 +163,11 @@ public class Entity : MonoBehaviour, IEntity
             yield return new WaitForSeconds(flashSpeed);
             flashingFor += flashSpeed;
             if (newColor == flashColor)
-                newColor = originalColor;
+                newColor = Color.white;
             else
                 newColor = flashColor;
         }
-        toFlash.color = originalColor;
+        toFlash.color = Color.white;
     }
 
 
