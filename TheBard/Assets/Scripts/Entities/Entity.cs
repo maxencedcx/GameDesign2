@@ -44,6 +44,9 @@ public class Entity : MonoBehaviour, IEntity
         else if (Time.time - lastAttack >= attackSpeed)
         {
             lastAttack = Time.time;
+            IEntity target = GameManager.Instance.InGameObjects.getClosestEnemy(gameObject.transform.position.y, Type);
+            if (target != null)
+                target.TakeDamage(attackDamages);
             GetComponent<Animator>().Play("Knight_Attack");
         }
     }
@@ -123,7 +126,6 @@ public class Entity : MonoBehaviour, IEntity
         this.Id = GameManager.Instance.InGameObjects.AddEntity(gameObject, Type);
         _health = maxHealth;
         gameObject.SetActive(true);
-        TakeDamage(50);
     }
 
     public virtual void TakeDamage(int damage)

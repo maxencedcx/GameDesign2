@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -98,5 +99,25 @@ public class InGameObjects
         foreach (KeyValuePair<int, GameObject> entry in Enemies)
             allEnemies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
         return allEnemies;
+    }
+
+    public IEntity getClosestEnemy(float yPos, EntityType type)
+    {
+        if (type == EntityType.ALLY)
+        {
+            if (Enemies.Count == 0)
+                return null;
+            else
+                return Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+        }
+        else if (type == EntityType.ENNEMY)
+        {
+            if (Allies.Count == 0)
+                return null;
+            else
+                return Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+        }
+
+        return null;
     }
 }
