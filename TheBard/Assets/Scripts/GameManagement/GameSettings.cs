@@ -29,7 +29,6 @@ public class GameSettings : MonoSingleton<GameSettings>
                 for (int i = 5; i < entitySetting.Length; i++)
                     immunities.Add((Immunity)System.Enum.Parse(typeof(Immunity), entitySetting[i]));
 
-            Debug.LogError(entitySetting[4]);
             entitiesSettings.Add(new EntitiesSettings(entitySetting[0], (EntityType)System.Enum.Parse(typeof(EntityType), entitySetting[1]), int.Parse(entitySetting[2]), int.Parse(entitySetting[3]), double.Parse(entitySetting[4]), immunities));
         }
 
