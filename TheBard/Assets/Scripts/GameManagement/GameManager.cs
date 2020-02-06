@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] private int levelId = 1;
     [SerializeField] GameObject parent;
+    private Controls _controls;
     public InGameObjects InGameObjects;
     public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
     {
@@ -16,9 +18,33 @@ public class GameManager : MonoSingleton<GameManager>
         { 4, new Vector3(4.5f, 3, 0)}
     };
 
+    private void Awake()
+    {
+        base.Awake();
+
+        _controls = new Controls();
+    }
+
     private void Start()
     {
         LoadGame();
+    }
+
+    private void OnEnable()
+    {
+        _controls.InGameBard.Pause.performed += PauseGame;
+        _controls.InGameBard.Pause.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _controls.InGameBard.Pause.performed -= PauseGame;
+        _controls.InGameBard.Pause.Disable();
+    }
+
+    private void PauseGame(InputAction.CallbackContext context)
+    {
+        Time.timeScale = 0;
     }
 
     private void LoadGame()

@@ -41,13 +41,13 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         _controls.InGameBard.PressKey.performed += HandleKeyPressed;
-        _controls.InGameBard.Enable();
+        _controls.InGameBard.PressKey.Enable();
     }
 
     private void OnDisable()
     {
         _controls.InGameBard.PressKey.performed -= HandleKeyPressed;
-        _controls.InGameBard.Disable();
+        _controls.InGameBard.PressKey.Disable();
     }
 
     private void HandleKeyPressed(InputAction.CallbackContext context)
