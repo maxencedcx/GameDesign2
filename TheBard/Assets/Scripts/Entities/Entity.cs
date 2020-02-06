@@ -147,7 +147,7 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
-        HealthBar.value = _health;
+        HealthBar.value = 100f * ((float)_health / (float)maxHealth);
     }
 
     protected virtual void OnDebuff()
