@@ -9,9 +9,18 @@ public enum EntityType
     ENNEMY
 }
 
+public enum Immunity
+{
+    STUN,
+    DEBUFFAD,
+    DEBUFFAS,
+}
+
+
+
 public interface IEntity
 {
-    void Init(EntityType type, int health, int damages, int attackspeed);
+    void Init(EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities = null);
     void TakeDamage(int damage);
     void HealDamage(int heal);
     void debuffStun(int duration);

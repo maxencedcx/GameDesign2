@@ -168,6 +168,10 @@ MonoBehaviour:
     type: 3}
   entityPrefab: {fileID: 5268993205352746573, guid: 296bee975d9c32b46b9aea03875b4bd1,
     type: 3}
+  cowboyPrefab: {fileID: 8512543437501867045, guid: 9f2f51b71804a66438ecbf6b4a9d26ad,
+    type: 3}
+  knightPrefab: {fileID: 3113344556403229385, guid: f0f593f22d77b344f874b198add80ccf,
+    type: 3}
 --- !u!1 &555061967
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +298,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d362003fe4ce434498c43c2031cd7977, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelId: 1
+  levelId: 3
   parent: {fileID: 1672847775}
 --- !u!1 &1672847775
 GameObject:
