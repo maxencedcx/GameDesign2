@@ -31,8 +31,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
         {
-            GameObject en = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab), parent.transform);
-            en.GetComponent<IEntity>().Init(es.Type, es.Health, es.Damages, es.AttackSpeed);
+            GameObject en = Instantiate(ResourcesManager.Instance.Get(es.PrefabType + Constants.Resources.suffixPrefab), parent.transform);
+            en.GetComponent<IEntity>().Init(es.Type, es.Health, es.Damages, es.AttackSpeed, es.Immunities);
             en.transform.position = slots[en.GetComponent<IEntity>().getId()];
             if (es.Type == EntityType.ALLY)
             {
@@ -108,14 +108,24 @@ public class InGameObjects
             if (Enemies.Count == 0)
                 return null;
             else
-                return Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+            {
+                var entry = Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                if (entry.Value == null)
+                    entry = Enemies.First();
+                return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
+            }
         }
         else if (type == EntityType.ENNEMY)
         {
             if (Allies.Count == 0)
                 return null;
             else
-                return Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+            {
+                var entry = Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                if (entry.Value == null)
+                    entry = Allies.First();
+                return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
+            }
         }
 
         return null;

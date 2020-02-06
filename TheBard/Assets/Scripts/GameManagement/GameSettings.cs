@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class GameSettings : MonoSingleton<GameSettings>
 {
@@ -14,32 +15,45 @@ public class GameSettings : MonoSingleton<GameSettings>
 
     public void LoadSettingsForLevel(int levelId)
     {
-        //load the file for this levelId
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
-        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
+        string line;
+        string path = "Assets/Resources/Levels/LEVEL_"+levelId+".txt";
+
+        //Read the text from directly from the test.txt file
+        StreamReader file = new StreamReader(path);
+
+        while ((line = file.ReadLine()) != null)
+        {
+            string[] entitySetting = line.Split('|');
+            List<Immunity> immunities = new List<Immunity>();
+            if (entitySetting.Length > 5)
+                for (int i = 5; i < entitySetting.Length; i++)
+                    immunities.Add((Immunity)System.Enum.Parse(typeof(Immunity), entitySetting[i]));
+
+            Debug.LogError(entitySetting[4]);
+            entitiesSettings.Add(new EntitiesSettings(entitySetting[0], (EntityType)System.Enum.Parse(typeof(EntityType), entitySetting[1]), int.Parse(entitySetting[2]), int.Parse(entitySetting[3]), double.Parse(entitySetting[4]), immunities));
+        }
+
+        file.Close();
     }
 }
 
 
 public struct EntitiesSettings
 {
-    //EntityType type = (EntityType)System.Enum.Parse(typeof(EntityType), "ENEMY");
+    public string PrefabType;
     public EntityType Type;
     public int Health;
     public int Damages;
-    public int AttackSpeed;
+    public double AttackSpeed;
+    public List<Immunity> Immunities;
 
-    public EntitiesSettings(EntityType type, int health, int damages, int attackspeed)
+    public EntitiesSettings(string prefabtype, EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities)
     {
+        PrefabType = prefabtype;
         Type = type;
         Health = health;
         Damages = damages;
         AttackSpeed = attackspeed;
+        Immunities = immunities;
     }
 }

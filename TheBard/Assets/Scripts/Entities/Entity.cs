@@ -12,6 +12,8 @@ public class Entity : MonoBehaviour, IEntity
     [SerializeField] protected float stunnedFor = 0;
     [SerializeField] protected Slider HealthBar;
     private float lastAttack = 0;
+    private List<Immunity> Immunities = null;
+
     public int Id { get; protected set; }
     protected int _health;
 
@@ -47,7 +49,7 @@ public class Entity : MonoBehaviour, IEntity
             IEntity target = GameManager.Instance.InGameObjects.getClosestEnemy(gameObject.transform.position.y, Type);
             if (target != null)
                 target.TakeDamage(attackDamages);
-            GetComponent<Animator>().Play("Knight_Attack");
+            GetComponent<Animator>().Play("Attack");
         }
     }
 
@@ -57,6 +59,8 @@ public class Entity : MonoBehaviour, IEntity
     public void debuffStun(int duration)
     {
         //stun
+        if (Immunities != null && Immunities.Contains(Immunity.STUN))
+            return;
         OnDebuff();
         stunnedFor += duration;
     }
@@ -64,6 +68,8 @@ public class Entity : MonoBehaviour, IEntity
     public void debuffAttackDamages(int value, int duration)
     {
         //change attack damages
+        if (Immunities != null && Immunities.Contains(Immunity.DEBUFFAD))
+            return;
         OnDebuff();
         StartCoroutine(coroutineDebuffAttackDamages(value, duration));
     }
@@ -92,6 +98,8 @@ public class Entity : MonoBehaviour, IEntity
     public void debuffAttackSpeed(double value, int duration)
     {
         //change attack speed
+        if (Immunities != null && Immunities.Contains(Immunity.DEBUFFAS))
+            return;
         OnDebuff();
         StartCoroutine(coroutineDebuffAttackSpeed(value, duration));
     }
@@ -117,13 +125,14 @@ public class Entity : MonoBehaviour, IEntity
         attackSpeed += value;
     }
 
-    public void Init(EntityType type, int health, int damages, int attackspeed)
+    public void Init(EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities = null)
     {
         this.Type = type;
         this.maxHealth = health;
         this.attackDamages = damages;
         this.attackSpeed = attackspeed;
         this.Id = GameManager.Instance.InGameObjects.AddEntity(gameObject, Type);
+        this.Immunities = immunities;
         _health = maxHealth;
         gameObject.SetActive(true);
     }
@@ -147,7 +156,7 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
-        HealthBar.value = _health;
+        HealthBar.value = 100f * ((float)_health / (float)maxHealth);
     }
 
     protected virtual void OnDebuff()
