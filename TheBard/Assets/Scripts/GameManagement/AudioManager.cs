@@ -83,6 +83,31 @@ public class AudioManager : MonoSingleton<AudioManager>
         audioSource.PlayOneShot(audioClip);
     }
 
+    public void setLoop(bool looping)
+    {
+        audioSource.loop = looping;
+    }
+
+    public void setAudioClip(AudioClip audioClip)
+    {
+        audioSource.clip = audioClip;
+    }
+
+    public void Play()
+    {
+        audioSource.Play();
+    }
+
+    public void Stop()
+    {
+        audioSource.Stop();
+    }
+
+    public bool isPlaying()
+    {
+        return audioSource.isPlaying;
+    }
+
     public void SetVolume(float volume)
     {
         //PlayerPrefs.SetFloat(Constants.PlayerPrefs.ClipsVolume, volume);
