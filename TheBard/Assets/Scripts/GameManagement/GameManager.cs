@@ -5,7 +5,15 @@ using UnityEngine;
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] private int levelId = 1;
+    [SerializeField] GameObject parent;
     public InGameObjects InGameObjects;
+    public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
+    {
+        { 1, new Vector3(2, -1.5f, 0)},
+        { 2, new Vector3(2, 1.5f, 0)},
+        { 3, new Vector3(4.5f, -3, 0)},
+        { 4, new Vector3(4.5f, 3, 0)}
+    };
 
     private void Start()
     {
@@ -17,16 +25,19 @@ public class GameManager : MonoSingleton<GameManager>
         InGameObjects = new InGameObjects();
         GameSettings.Instance.LoadSettingsForLevel(levelId);
 
-        GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab));
+        GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab), parent.transform);
         InGameObjects.setPlayer(player);
 
         foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
         {
-            GameObject en = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
+            GameObject en = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab), parent.transform);
             en.GetComponent<IEntity>().Init(es.Type, es.Health, es.Damages, es.AttackSpeed);
+            en.transform.position = slots[en.GetComponent<IEntity>().getId()];
             if (es.Type == EntityType.ALLY)
             {
-                en.transform.position = new Vector3(-3, 0, 0);
+                Vector3 tmpPos = en.transform.position;
+                tmpPos.x *= -1;
+                en.transform.position = tmpPos;
                 en.GetComponent<SpriteRenderer>().flipX = false;
             }
         }
@@ -55,12 +66,12 @@ public class InGameObjects
         int id = 0;
         if (type == EntityType.ALLY)
         {
-            id = Allies.Count;
+            id = Allies.Count + 1;
             Allies.Add(id, entity);
         }
         else if (type == EntityType.ENNEMY)
         {
-            id = Enemies.Count;
+            id = Enemies.Count + 1;
             Enemies.Add(id, entity);
         }
         return id;

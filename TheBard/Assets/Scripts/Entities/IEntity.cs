@@ -19,4 +19,5 @@ public interface IEntity
     void debuffAttackDamages(int value, int duration);
     void buffAttackSpeed(double value, int duration);
     void buffAttackDamages(int value, int duration);
+    int getId();
 }

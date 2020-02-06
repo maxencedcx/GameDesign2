@@ -10,10 +10,10 @@ public class Entity : MonoBehaviour, IEntity
     [SerializeField] protected double attackSpeed = 1;
     [SerializeField] protected int attackDamages = 10;
     [SerializeField] protected float stunnedFor = 0;
+    [SerializeField] protected Slider HealthBar;
     private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
-    public Slider HealthBar;
 
     virtual protected int Health
     {
@@ -47,6 +47,9 @@ public class Entity : MonoBehaviour, IEntity
             GetComponent<Animator>().Play("Knight_Attack");
         }
     }
+
+    public int getId()
+    { return Id; }
 
     public void debuffStun(int duration)
     {
@@ -118,8 +121,9 @@ public class Entity : MonoBehaviour, IEntity
         this.attackDamages = damages;
         this.attackSpeed = attackspeed;
         this.Id = GameManager.Instance.InGameObjects.AddEntity(gameObject, Type);
-        _health = maxHealth - 50;
+        _health = maxHealth;
         gameObject.SetActive(true);
+        TakeDamage(50);
     }
 
     public virtual void TakeDamage(int damage)

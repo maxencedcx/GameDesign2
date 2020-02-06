@@ -16,6 +16,12 @@ public class GameSettings : MonoSingleton<GameSettings>
     {
         //load the file for this levelId
         entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ENNEMY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
+        entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
         entitiesSettings.Add(new EntitiesSettings(EntityType.ALLY, 100, 10, 1));
     }
 }
