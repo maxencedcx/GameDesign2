@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Entity : MonoBehaviour, IEntity
 {
@@ -12,6 +13,8 @@ public class Entity : MonoBehaviour, IEntity
     private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
+    public Slider HealthBar;
+
     virtual protected int Health
     {
         get { return _health; }
@@ -134,6 +137,7 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
+        HealthBar.value = _health;
     }
 
     protected virtual void OnDebuff()
