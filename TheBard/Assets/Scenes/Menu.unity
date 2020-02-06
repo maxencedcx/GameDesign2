@@ -1203,6 +1203,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97949e46f2093734db12271eb7873bd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  jingleIntro: {fileID: 8300000, guid: b9d02c11710491e448b8087439bf382f, type: 3}
+  menuMusic: {fileID: 8300000, guid: 727107c261c260149bd4ec4e36ad33fb, type: 3}
 --- !u!4 &1489660009
 Transform:
   m_ObjectHideFlags: 0
