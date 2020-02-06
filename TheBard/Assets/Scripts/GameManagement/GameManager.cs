@@ -9,6 +9,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] private int levelId = 1;
     [SerializeField] GameObject parent;
     private Controls _controls;
+    private bool paused = false;
     public InGameObjects InGameObjects;
     public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
     {
@@ -44,7 +45,18 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void PauseGame(InputAction.CallbackContext context)
     {
-        Time.timeScale = 0;
+        if (paused == false)
+        {
+            Time.timeScale = 0;
+            _controls.InGameBard.PressKey.Disable();
+            paused = true;
+        }
+        else if (paused == true)
+        {
+            Time.timeScale = 1;
+            _controls.InGameBard.PressKey.Enable();
+            paused = false;
+        }
     }
 
     private void LoadGame()
