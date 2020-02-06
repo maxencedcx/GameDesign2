@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    [SerializeField] private int levelId = 1;
     public InGameObjects InGameObjects;
 
     private void Start()
@@ -14,17 +15,21 @@ public class GameManager : MonoSingleton<GameManager>
     private void LoadGame()
     {
         InGameObjects = new InGameObjects();
+        GameSettings.Instance.LoadSettingsForLevel(levelId);
 
         GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab));
         InGameObjects.setPlayer(player);
 
-        GameObject enemy = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
-        enemy.GetComponent<IEntity>().Init(1, EntityType.ENNEMY);
-
-        GameObject ally = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
-        ally.GetComponent<IEntity>().Init(1, EntityType.ALLY);
-        ally.transform.position = new Vector3(-3, 0, 0);
-        ally.GetComponent<SpriteRenderer>().flipX = false;
+        foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
+        {
+            GameObject en = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
+            en.GetComponent<IEntity>().Init(es.Type, es.Health, es.Damages, es.AttackSpeed);
+            if (es.Type == EntityType.ALLY)
+            {
+                en.transform.position = new Vector3(-3, 0, 0);
+                en.GetComponent<SpriteRenderer>().flipX = false;
+            }
+        }
     }
 }
 
@@ -45,12 +50,20 @@ public class InGameObjects
         Player = player;
     }
 
-    public void AddEntity(int id, GameObject entity, EntityType type)
+    public int AddEntity(GameObject entity, EntityType type)
     {
+        int id = 0;
         if (type == EntityType.ALLY)
+        {
+            id = Allies.Count;
             Allies.Add(id, entity);
+        }
         else if (type == EntityType.ENNEMY)
+        {
+            id = Enemies.Count;
             Enemies.Add(id, entity);
+        }
+        return id;
     }
     public void RemoveEntity(int id, EntityType type)
     {

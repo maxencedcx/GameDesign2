@@ -11,7 +11,7 @@ public enum EntityType
 
 public interface IEntity
 {
-    void Init(int Id, EntityType type);
+    void Init(EntityType type, int health, int damages, int attackspeed);
     void TakeDamage(int damage);
     void HealDamage(int heal);
     void debuffStun(int duration);
