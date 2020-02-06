@@ -25,7 +25,6 @@ public class GameManager : MonoSingleton<GameManager>
         ally.GetComponent<IEntity>().Init(1, EntityType.ALLY);
         ally.transform.position = new Vector3(-3, 0, 0);
         ally.GetComponent<SpriteRenderer>().flipX = false;
-        Debug.Log(ally.transform);
     }
 }
 
