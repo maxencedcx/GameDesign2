@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Entity : MonoBehaviour, IEntity
 {
@@ -9,9 +10,11 @@ public class Entity : MonoBehaviour, IEntity
     [SerializeField] protected double attackSpeed = 1;
     [SerializeField] protected int attackDamages = 10;
     [SerializeField] protected float stunnedFor = 0;
+    [SerializeField] protected Slider HealthBar;
     private float lastAttack = 0;
     public int Id { get; protected set; }
     protected int _health;
+
     virtual protected int Health
     {
         get { return _health; }
@@ -27,9 +30,9 @@ public class Entity : MonoBehaviour, IEntity
         }
     }
 
-    void Awake()
+    private void Awake()
     {
-        _health = maxHealth;
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -41,9 +44,15 @@ public class Entity : MonoBehaviour, IEntity
         else if (Time.time - lastAttack >= attackSpeed)
         {
             lastAttack = Time.time;
+            IEntity target = GameManager.Instance.InGameObjects.getClosestEnemy(gameObject.transform.position.y, Type);
+            if (target != null)
+                target.TakeDamage(attackDamages);
             GetComponent<Animator>().Play("Knight_Attack");
         }
     }
+
+    public int getId()
+    { return Id; }
 
     public void debuffStun(int duration)
     {
@@ -108,11 +117,15 @@ public class Entity : MonoBehaviour, IEntity
         attackSpeed += value;
     }
 
-    public void Init(int Id, EntityType type)
+    public void Init(EntityType type, int health, int damages, int attackspeed)
     {
-        this.Id = Id;
         this.Type = type;
-        GameManager.Instance.InGameObjects.AddEntity(Id, gameObject, Type);
+        this.maxHealth = health;
+        this.attackDamages = damages;
+        this.attackSpeed = attackspeed;
+        this.Id = GameManager.Instance.InGameObjects.AddEntity(gameObject, Type);
+        _health = maxHealth;
+        gameObject.SetActive(true);
     }
 
     public virtual void TakeDamage(int damage)
@@ -134,6 +147,7 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void OnHealthChange(int value)
     {
         /*Update lifebar, activate red or green blink, play sound...*/
+        HealthBar.value = _health;
     }
 
     protected virtual void OnDebuff()

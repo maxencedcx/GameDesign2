@@ -1,10 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoSingleton<GameManager>
 {
+    [SerializeField] private int levelId = 1;
+    [SerializeField] GameObject parent;
     public InGameObjects InGameObjects;
+    public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
+    {
+        { 1, new Vector3(2, -1.5f, 0)},
+        { 2, new Vector3(2, 1.5f, 0)},
+        { 3, new Vector3(4.5f, -3, 0)},
+        { 4, new Vector3(4.5f, 3, 0)}
+    };
 
     private void Start()
     {
@@ -14,17 +24,24 @@ public class GameManager : MonoSingleton<GameManager>
     private void LoadGame()
     {
         InGameObjects = new InGameObjects();
+        GameSettings.Instance.LoadSettingsForLevel(levelId);
 
-        GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab));
+        GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab), parent.transform);
         InGameObjects.setPlayer(player);
 
-        GameObject enemy = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
-        enemy.GetComponent<IEntity>().Init(1, EntityType.ENNEMY);
-
-        GameObject ally = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab));
-        ally.GetComponent<IEntity>().Init(1, EntityType.ALLY);
-        ally.transform.position = new Vector3(-3, 0, 0);
-        ally.GetComponent<SpriteRenderer>().flipX = false;
+        foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
+        {
+            GameObject en = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.entityPrefab), parent.transform);
+            en.GetComponent<IEntity>().Init(es.Type, es.Health, es.Damages, es.AttackSpeed);
+            en.transform.position = slots[en.GetComponent<IEntity>().getId()];
+            if (es.Type == EntityType.ALLY)
+            {
+                Vector3 tmpPos = en.transform.position;
+                tmpPos.x *= -1;
+                en.transform.position = tmpPos;
+                en.GetComponent<SpriteRenderer>().flipX = false;
+            }
+        }
     }
 }
 
@@ -45,12 +62,20 @@ public class InGameObjects
         Player = player;
     }
 
-    public void AddEntity(int id, GameObject entity, EntityType type)
+    public int AddEntity(GameObject entity, EntityType type)
     {
+        int id = 0;
         if (type == EntityType.ALLY)
+        {
+            id = Allies.Count + 1;
             Allies.Add(id, entity);
+        }
         else if (type == EntityType.ENNEMY)
+        {
+            id = Enemies.Count + 1;
             Enemies.Add(id, entity);
+        }
+        return id;
     }
     public void RemoveEntity(int id, EntityType type)
     {
@@ -74,5 +99,25 @@ public class InGameObjects
         foreach (KeyValuePair<int, GameObject> entry in Enemies)
             allEnemies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
         return allEnemies;
+    }
+
+    public IEntity getClosestEnemy(float yPos, EntityType type)
+    {
+        if (type == EntityType.ALLY)
+        {
+            if (Enemies.Count == 0)
+                return null;
+            else
+                return Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+        }
+        else if (type == EntityType.ENNEMY)
+        {
+            if (Allies.Count == 0)
+                return null;
+            else
+                return Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault().Value.GetComponent<IEntity>();
+        }
+
+        return null;
     }
 }
