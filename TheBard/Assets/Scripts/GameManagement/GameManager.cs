@@ -31,16 +31,31 @@ public class GameManager : MonoSingleton<GameManager>
         LoadGame();
     }
 
+    public void addActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.performed += action;
+    }
+    public void removeActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.performed -= action;
+    }
+
     private void OnEnable()
     {
         _controls.InGameBard.Pause.performed += PauseGame;
-        _controls.InGameBard.Pause.Enable();
+        _controls.InGameBard.Enable();
     }
 
     private void OnDisable()
     {
         _controls.InGameBard.Pause.performed -= PauseGame;
-        _controls.InGameBard.Pause.Disable();
+        _controls.InGameBard.Disable();
     }
 
     private void PauseGame(InputAction.CallbackContext context)

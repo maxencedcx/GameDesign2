@@ -5,14 +5,12 @@ using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
-    private Controls _controls;
     private Queue<string> _notes;
     private Dictionary<string, System.Action> _spells;
     private Dictionary<string, string> _keyToNote;
 
     private void Awake()
     {
-        _controls = new Controls();
         _notes = new Queue<string>();
         _spells = new Dictionary<string, System.Action>();
         _spells.Add("DoMiSol", BuffHealSpell);
@@ -40,14 +38,12 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _controls.InGameBard.PressKey.performed += HandleKeyPressed;
-        _controls.InGameBard.PressKey.Enable();
+        GameManager.Instance.addActionToInputAction("KeyPress", HandleKeyPressed);
     }
 
     private void OnDisable()
     {
-        _controls.InGameBard.PressKey.performed -= HandleKeyPressed;
-        _controls.InGameBard.PressKey.Disable();
+        GameManager.Instance.removeActionToInputAction("KeyPress", HandleKeyPressed);
     }
 
     private void HandleKeyPressed(InputAction.CallbackContext context)
