@@ -27,9 +27,9 @@ public class Entity : MonoBehaviour, IEntity
         }
     }
 
-    void Awake()
+    private void Awake()
     {
-        _health = maxHealth;
+        gameObject.SetActive(false);
     }
 
     private void Update()
@@ -108,11 +108,15 @@ public class Entity : MonoBehaviour, IEntity
         attackSpeed += value;
     }
 
-    public void Init(int Id, EntityType type)
+    public void Init(EntityType type, int health, int damages, int attackspeed)
     {
-        this.Id = Id;
         this.Type = type;
-        GameManager.Instance.InGameObjects.AddEntity(Id, gameObject, Type);
+        this.maxHealth = health;
+        this.attackDamages = damages;
+        this.attackSpeed = attackspeed;
+        this.Id = GameManager.Instance.InGameObjects.AddEntity(gameObject, Type);
+        _health = maxHealth - 50;
+        gameObject.SetActive(true);
     }
 
     public virtual void TakeDamage(int damage)
