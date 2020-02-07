@@ -18,7 +18,12 @@
     {
         // PREFABS
         public const string prefabsPath = "Prefabs/";
-        public const string playerPrefab = "playerPrefab";
+        public const string suffixPrefab = "_prefab";
+        public const string playerPrefab = "PLAYER" + suffixPrefab;
+        public const string entityPrefab = "ENTITY" + suffixPrefab;
+        public const string cowboyPrefab = "COWBOY" + suffixPrefab;
+        public const string knightPrefab = "KNIGHT" + suffixPrefab;
+        public const string enemyBardPrefab = "ENEMYBARD" + suffixPrefab;
 
         // SOUNDS
         public const string soundsPath = "Sounds/";
