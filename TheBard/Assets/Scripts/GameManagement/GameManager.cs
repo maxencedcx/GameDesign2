@@ -13,6 +13,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] GameObject defeatImage;
     [SerializeField] GameObject victoryImage;
     [SerializeField] GameObject blackPanel;
+    [SerializeField] float loadingTime = 2.0f;
     private Controls _controls;
     private bool paused = false;
     private bool loadingGame = false;
@@ -147,7 +148,7 @@ public class GameManager : MonoSingleton<GameManager>
         {
             blackPanel.SetActive(true);
             victoryImage.SetActive(true);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(loadingTime);
             blackPanel.SetActive(false);
             victoryImage.SetActive(false);
         }
@@ -162,7 +163,7 @@ public class GameManager : MonoSingleton<GameManager>
         GameSettings.Instance.Reset();
         blackPanel.SetActive(true);
         defeatImage.SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(loadingTime);
         blackPanel.SetActive(false);
         defeatImage.SetActive(false);
         SceneManager.LoadScene("Menu");

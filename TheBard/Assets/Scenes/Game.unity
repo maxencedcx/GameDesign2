@@ -697,6 +697,7 @@ MonoBehaviour:
   defeatImage: {fileID: 2102312741}
   victoryImage: {fileID: 998026425}
   blackPanel: {fileID: 576113367}
+  loadingTime: 2
 --- !u!1 &1672847775
 GameObject:
   m_ObjectHideFlags: 0
