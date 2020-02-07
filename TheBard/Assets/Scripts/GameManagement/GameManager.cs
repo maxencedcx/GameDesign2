@@ -9,6 +9,10 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] private int levelId = 1;
     [SerializeField] GameObject parent;
+    [SerializeField] GameObject pauseImage;
+    [SerializeField] GameObject defeatImage;
+    [SerializeField] GameObject victoryImage;
+    [SerializeField] GameObject blackPanel;
     private Controls _controls;
     private bool paused = false;
     private bool loadingGame = false;
@@ -38,8 +42,9 @@ public class GameManager : MonoSingleton<GameManager>
     {
         if (loadingGame)
             return;
+        Debug.Log(InGameObjects.getAlliesCount());
         if (InGameObjects.getAlliesCount() == 0)
-            SceneManager.LoadScene("Menu");
+            StartCoroutine(goBackToMenu());
         else if (InGameObjects.getEnemiesCount() == 0 && levelId < 5)
             StartCoroutine(loadLevel(++levelId));
         else if (InGameObjects.getEnemiesCount() == 0 && levelId == 5)
@@ -103,6 +108,8 @@ public class GameManager : MonoSingleton<GameManager>
             _controls.InGameBard.PressKey.Enable();
             paused = false;
         }
+        blackPanel.SetActive(paused);
+        pauseImage.SetActive(paused);
     }
 
     private void LoadGame()
@@ -137,9 +144,28 @@ public class GameManager : MonoSingleton<GameManager>
         InGameObjects.Reset();
         GameSettings.Instance.Reset();
         if (levelId > 1)
-            yield return new WaitForSeconds(0.25f);
+        {
+            blackPanel.SetActive(true);
+            victoryImage.SetActive(true);
+            yield return new WaitForSeconds(1f);
+            blackPanel.SetActive(false);
+            victoryImage.SetActive(false);
+        }
         loadingGame = false;
         LoadGame();
+    }
+
+    IEnumerator goBackToMenu()
+    {
+        loadingGame = true;
+        InGameObjects.Reset();
+        GameSettings.Instance.Reset();
+        blackPanel.SetActive(true);
+        defeatImage.SetActive(true);
+        yield return new WaitForSeconds(1f);
+        blackPanel.SetActive(false);
+        defeatImage.SetActive(false);
+        SceneManager.LoadScene("Menu");
     }
 }
 
