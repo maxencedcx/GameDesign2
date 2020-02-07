@@ -29,4 +29,5 @@ public interface IEntity
     void buffAttackSpeed(double value, int duration);
     void buffAttackDamages(int value, int duration);
     int getId();
+    bool getIsDead();
 }

@@ -13,6 +13,7 @@ public class Entity : MonoBehaviour, IEntity
     [SerializeField] protected Slider HealthBar;
     private float lastAttack = 0;
     private List<Immunity> Immunities = null;
+    private bool isDead = false;
 
     public int Id { get; protected set; }
     protected int _health;
@@ -39,6 +40,8 @@ public class Entity : MonoBehaviour, IEntity
 
     private void Update()
     {
+        if (isDead)
+            return;
         if (stunnedFor > 0)
             stunnedFor = Mathf.Clamp(stunnedFor - Time.deltaTime, 0, stunnedFor);
         else if (Time.time - lastAttack >= attackSpeed)
@@ -52,6 +55,9 @@ public class Entity : MonoBehaviour, IEntity
             }
         }
     }
+
+    public bool getIsDead()
+    { return isDead; }
 
     public int getId()
     { return Id; }
@@ -171,7 +177,10 @@ public class Entity : MonoBehaviour, IEntity
     protected virtual void Die()
     {
         Debug.Log(Type.ToString() + Id + " -- DEAD");
-        Destroy(gameObject);
+        gameObject.transform.Rotate(Vector3.forward * 90);
+        HealthBar.gameObject.SetActive(false);
+        gameObject.GetComponent<Animator>().enabled = false;
+        isDead = true;
     }
 
     IEnumerator FlashObject(SpriteRenderer toFlash, Color flashColor, float flashTime, float flashSpeed)
@@ -190,11 +199,5 @@ public class Entity : MonoBehaviour, IEntity
                 newColor = flashColor;
         }
         toFlash.color = Color.white;
-    }
-
-
-    private void OnDestroy()
-    {
-        GameManager.Instance.InGameObjects.RemoveEntity(Id, Type);
     }
 }

@@ -224,7 +224,8 @@ public class InGameObjects
     {
         Dictionary<int, IEntity> allAllies = new Dictionary<int, IEntity>();
         foreach (KeyValuePair<int, GameObject> entry in Allies)
-            allAllies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
+            if (!entry.Value.GetComponent<IEntity>().getIsDead())
+                allAllies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
         return allAllies;
     }
 
@@ -232,7 +233,8 @@ public class InGameObjects
     {
         Dictionary<int, IEntity> allEnemies = new Dictionary<int, IEntity>();
         foreach (KeyValuePair<int, GameObject> entry in Enemies)
-            allEnemies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
+            if (!entry.Value.GetComponent<IEntity>().getIsDead())
+                allEnemies.Add(entry.Key, entry.Value.GetComponent<IEntity>());
         return allEnemies;
     }
 
@@ -244,7 +246,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Enemies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Enemies.Where(x => ((yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)) && !x.Value.GetComponent<IEntity>().getIsDead()).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Enemies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -256,7 +258,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Allies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Allies.Where(x => ((yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)) && !x.Value.GetComponent<IEntity>().getIsDead()).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Allies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -267,10 +269,10 @@ public class InGameObjects
     }
 
     public int getAlliesCount()
-    { return Allies.Count; }
+    { return Allies.Where(x => !x.Value.GetComponent<IEntity>().getIsDead()).ToList().Count; }
 
     public int getEnemiesCount()
-    { return Enemies.Count; }
+    { return Enemies.Where(x => !x.Value.GetComponent<IEntity>().getIsDead()).ToList().Count; }
 
 
     public void Reset()
