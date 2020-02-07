@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -10,6 +11,7 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField] GameObject parent;
     private Controls _controls;
     private bool paused = false;
+    private bool loadingGame = false;
     public InGameObjects InGameObjects;
     public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
     {
@@ -28,7 +30,20 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Start()
     {
-        LoadGame();
+        InGameObjects = new InGameObjects();
+        StartCoroutine(loadLevel(levelId));
+    }
+
+    private void Update()
+    {
+        if (loadingGame)
+            return;
+        if (InGameObjects.getAlliesCount() == 0)
+            SceneManager.LoadScene("Menu");
+        else if (InGameObjects.getEnemiesCount() == 0 && levelId < 5)
+            StartCoroutine(loadLevel(++levelId));
+        else if (InGameObjects.getEnemiesCount() == 0 && levelId == 5)
+            Debug.Log("end of the game");
     }
 
     public void addActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
@@ -37,7 +52,6 @@ public class GameManager : MonoSingleton<GameManager>
         if (inputAction == null)
             return;
         inputAction.performed += action;
-        Debug.Log("ok");
     }
     public void removeActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
     {
@@ -93,7 +107,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void LoadGame()
     {
-        InGameObjects = new InGameObjects();
         GameSettings.Instance.LoadSettingsForLevel(levelId);
 
         GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab), parent.transform);
@@ -112,6 +125,17 @@ public class GameManager : MonoSingleton<GameManager>
                 en.GetComponent<SpriteRenderer>().flipX = false;
             }
         }
+    }
+
+    IEnumerator loadLevel(int levelId)
+    {
+        Debug.Log("loading level " + levelId);
+        loadingGame = true;
+        InGameObjects.Reset();
+        GameSettings.Instance.Reset();
+        yield return new WaitForSeconds(0.25f);
+        loadingGame = false;
+        LoadGame();
     }
 }
 
@@ -179,7 +203,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Enemies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Enemies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -191,7 +215,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Allies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Allies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -199,5 +223,23 @@ public class InGameObjects
         }
 
         return null;
+    }
+
+    public int getAlliesCount()
+    { return Allies.Count; }
+
+    public int getEnemiesCount()
+    { return Enemies.Count; }
+
+
+    public void Reset()
+    {
+        GameObject.Destroy(Player);
+        foreach (var entry in Allies.Values)
+            GameObject.Destroy(entry);
+        foreach (var entry in Enemies.Values)
+            GameObject.Destroy(entry);
+        Allies.Clear();
+        Enemies.Clear();
     }
 }

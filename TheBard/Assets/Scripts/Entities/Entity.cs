@@ -48,8 +48,10 @@ public class Entity : MonoBehaviour, IEntity
             lastAttack = Time.time;
             IEntity target = GameManager.Instance.InGameObjects.getClosestEnemy(gameObject.transform.position.y, Type);
             if (target != null)
+            {
                 target.TakeDamage(attackDamages);
-            GetComponent<Animator>().Play("Attack");
+                GetComponent<Animator>().Play("Attack");
+            }
         }
     }
 

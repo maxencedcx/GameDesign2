@@ -13,12 +13,16 @@ public class GameSettings : MonoSingleton<GameSettings>
         DontDestroyOnLoad(gameObject);
     }
 
+    public void Reset()
+    {
+        entitiesSettings.Clear();
+    }
+
     public void LoadSettingsForLevel(int levelId)
     {
         string line;
         string path = "Assets/Resources/Levels/LEVEL_"+levelId+".txt";
 
-        //Read the text from directly from the test.txt file
         StreamReader file = new StreamReader(path);
 
         while ((line = file.ReadLine()) != null)
