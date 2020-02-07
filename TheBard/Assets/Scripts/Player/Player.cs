@@ -36,14 +36,16 @@ public class Player : MonoBehaviour
         };
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        GameManager.Instance.addActionToInputAction("KeyPress", HandleKeyPressed);
+        GameManager.Instance.addActionToInputAction("PressKey", HandleKeyPressed);
+        GameManager.Instance.enableInputActionByName("PressKey");
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        GameManager.Instance.removeActionToInputAction("KeyPress", HandleKeyPressed);
+        GameManager.Instance.removeActionToInputAction("PressKey", HandleKeyPressed);
+        GameManager.Instance.disableInputActionByName("PressKey");
     }
 
     private void HandleKeyPressed(InputAction.CallbackContext context)

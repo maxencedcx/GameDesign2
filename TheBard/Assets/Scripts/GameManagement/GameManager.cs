@@ -19,10 +19,11 @@ public class GameManager : MonoSingleton<GameManager>
         { 4, new Vector3(4.5f, 3, 0)}
     };
 
-    private void Awake()
+    private void Awake() 
     {
         base.Awake();
 
+        Debug.Log("AwakaGameManager");
         _controls = new Controls();
     }
 
@@ -37,6 +38,7 @@ public class GameManager : MonoSingleton<GameManager>
         if (inputAction == null)
             return;
         inputAction.performed += action;
+        Debug.Log("ok");
     }
     public void removeActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
     {
@@ -44,6 +46,22 @@ public class GameManager : MonoSingleton<GameManager>
         if (inputAction == null)
             return;
         inputAction.performed -= action;
+    }
+
+    public void enableInputActionByName(string inputActionName)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.Enable();
+    }
+
+    public void disableInputActionByName(string inputActionName)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.Disable();
     }
 
     private void OnEnable()
