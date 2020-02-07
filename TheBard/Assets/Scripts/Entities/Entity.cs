@@ -120,6 +120,8 @@ public class Entity : MonoBehaviour, IEntity
     public void buffAttackSpeed(double value, int duration)
     {
         //change attack speed
+        if (attackSpeed <= 0.5)
+            return;
         OnBuff();
         StartCoroutine(coroutineBuffAttackSpeed(value, duration));
     }
