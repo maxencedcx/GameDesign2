@@ -25,6 +25,14 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""fca4809f-fa74-45d0-a685-966e6d2c8cb8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -115,6 +123,28 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""PressKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6168e299-e45d-4129-8be2-f38a8d2f62cb"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41fe6ae1-d149-441b-a6a2-f251008e8b3d"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -124,6 +154,7 @@ public class @Controls : IInputActionCollection, IDisposable
         // InGameBard
         m_InGameBard = asset.FindActionMap("InGameBard", throwIfNotFound: true);
         m_InGameBard_PressKey = m_InGameBard.FindAction("PressKey", throwIfNotFound: true);
+        m_InGameBard_Pause = m_InGameBard.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -174,11 +205,13 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputActionMap m_InGameBard;
     private IInGameBardActions m_InGameBardActionsCallbackInterface;
     private readonly InputAction m_InGameBard_PressKey;
+    private readonly InputAction m_InGameBard_Pause;
     public struct InGameBardActions
     {
         private @Controls m_Wrapper;
         public InGameBardActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @PressKey => m_Wrapper.m_InGameBard_PressKey;
+        public InputAction @Pause => m_Wrapper.m_InGameBard_Pause;
         public InputActionMap Get() { return m_Wrapper.m_InGameBard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -191,6 +224,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @PressKey.started -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPressKey;
                 @PressKey.performed -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPressKey;
                 @PressKey.canceled -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPressKey;
+                @Pause.started -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_InGameBardActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_InGameBardActionsCallbackInterface = instance;
             if (instance != null)
@@ -198,6 +234,9 @@ public class @Controls : IInputActionCollection, IDisposable
                 @PressKey.started += instance.OnPressKey;
                 @PressKey.performed += instance.OnPressKey;
                 @PressKey.canceled += instance.OnPressKey;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -205,5 +244,6 @@ public class @Controls : IInputActionCollection, IDisposable
     public interface IInGameBardActions
     {
         void OnPressKey(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

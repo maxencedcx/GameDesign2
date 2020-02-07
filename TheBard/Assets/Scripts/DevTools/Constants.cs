@@ -23,6 +23,7 @@
         public const string entityPrefab = "ENTITY" + suffixPrefab;
         public const string cowboyPrefab = "COWBOY" + suffixPrefab;
         public const string knightPrefab = "KNIGHT" + suffixPrefab;
+        public const string enemyBardPrefab = "ENEMYBARD" + suffixPrefab;
 
         // SOUNDS
         public const string soundsPath = "Sounds/";

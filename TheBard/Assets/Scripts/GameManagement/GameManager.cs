@@ -2,32 +2,118 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField] private int levelId = 1;
     [SerializeField] GameObject parent;
+    private Controls _controls;
+    private bool paused = false;
+    private bool loadingGame = false;
     public InGameObjects InGameObjects;
     public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
     {
-        { 1, new Vector3(2, -1.5f, 0)},
-        { 2, new Vector3(2, 1.5f, 0)},
+        { 1, new Vector3(2, -2.5f, 0)},
+        { 2, new Vector3(2, -0.5f, 0)},
         { 3, new Vector3(4.5f, -3, 0)},
-        { 4, new Vector3(4.5f, 3, 0)}
+        { 4, new Vector3(4.5f, 0, 0)}
     };
+
+    private void Awake() 
+    {
+        base.Awake();
+
+        _controls = new Controls();
+    }
 
     private void Start()
     {
-        LoadGame();
+        InGameObjects = new InGameObjects();
+        StartCoroutine(loadLevel(levelId));
+    }
+
+    private void Update()
+    {
+        if (loadingGame)
+            return;
+        if (InGameObjects.getAlliesCount() == 0)
+            SceneManager.LoadScene("Menu");
+        else if (InGameObjects.getEnemiesCount() == 0 && levelId < 5)
+            StartCoroutine(loadLevel(++levelId));
+        else if (InGameObjects.getEnemiesCount() == 0 && levelId == 5)
+            Debug.Log("end of the game");
+    }
+
+    public void addActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.performed += action;
+    }
+    public void removeActionToInputAction(string inputActionName, System.Action<InputAction.CallbackContext> action)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.performed -= action;
+    }
+
+    public void enableInputActionByName(string inputActionName)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.Enable();
+    }
+
+    public void disableInputActionByName(string inputActionName)
+    {
+        var inputAction = _controls.InGameBard.Get().actions.Where(x => x.name == inputActionName).FirstOrDefault();
+        if (inputAction == null)
+            return;
+        inputAction.Disable();
+    }
+
+    private void OnEnable()
+    {
+        _controls.InGameBard.Pause.performed += PauseGame;
+        _controls.InGameBard.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _controls.InGameBard.Pause.performed -= PauseGame;
+        _controls.InGameBard.Disable();
+    }
+
+    private void PauseGame(InputAction.CallbackContext context)
+    {
+        if (paused == false)
+        {
+            Time.timeScale = 0;
+            _controls.InGameBard.PressKey.Disable();
+            paused = true;
+        }
+        else if (paused == true)
+        {
+            Time.timeScale = 1;
+            _controls.InGameBard.PressKey.Enable();
+            paused = false;
+        }
     }
 
     private void LoadGame()
     {
-        InGameObjects = new InGameObjects();
         GameSettings.Instance.LoadSettingsForLevel(levelId);
 
         GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab), parent.transform);
         InGameObjects.setPlayer(player);
+
+        if (levelId == 5)
+            Instantiate(ResourcesManager.Instance.Get(Constants.Resources.enemyBardPrefab), parent.transform);
 
         foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
         {
@@ -42,6 +128,18 @@ public class GameManager : MonoSingleton<GameManager>
                 en.GetComponent<SpriteRenderer>().flipX = false;
             }
         }
+    }
+
+    IEnumerator loadLevel(int levelId)
+    {
+        Debug.Log("loading level " + levelId);
+        loadingGame = true;
+        InGameObjects.Reset();
+        GameSettings.Instance.Reset();
+        if (levelId > 1)
+            yield return new WaitForSeconds(0.25f);
+        loadingGame = false;
+        LoadGame();
     }
 }
 
@@ -85,6 +183,16 @@ public class InGameObjects
             Enemies.Remove(id);
     }
 
+    public Dictionary<int, IEntity> getAllContraryEntityTypes(EntityType type)
+    {
+        return (type == EntityType.ALLY) ? (getAllEnemies()) : (getAllAllies());
+    }
+
+    public Dictionary<int, IEntity> getAllSimilarEntityTypes(EntityType type)
+    {
+        return (type == EntityType.ALLY) ? (getAllAllies()) : (getAllEnemies());
+    }
+
     public Dictionary<int, IEntity> getAllAllies()
     {
         Dictionary<int, IEntity> allAllies = new Dictionary<int, IEntity>();
@@ -109,7 +217,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Enemies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Enemies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Enemies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -121,7 +229,7 @@ public class InGameObjects
                 return null;
             else
             {
-                var entry = Allies.Where(x => (yPos > 0) ? (x.Value.transform.position.y > 0) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
+                var entry = Allies.Where(x => (yPos > -1) ? (x.Value.transform.position.y > -1) : (x.Value.transform.position.y < 0)).OrderBy(x => x.Key).FirstOrDefault();
                 if (entry.Value == null)
                     entry = Allies.First();
                 return (entry.Value == null) ? (null) : (entry.Value.GetComponent<IEntity>());
@@ -129,5 +237,23 @@ public class InGameObjects
         }
 
         return null;
+    }
+
+    public int getAlliesCount()
+    { return Allies.Count; }
+
+    public int getEnemiesCount()
+    { return Enemies.Count; }
+
+
+    public void Reset()
+    {
+        GameObject.Destroy(Player);
+        foreach (var entry in Allies.Values)
+            GameObject.Destroy(entry);
+        foreach (var entry in Enemies.Values)
+            GameObject.Destroy(entry);
+        Allies.Clear();
+        Enemies.Clear();
     }
 }
