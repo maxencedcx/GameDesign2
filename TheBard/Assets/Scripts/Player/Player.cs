@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private GameObject displayNotes;
     private Queue<string> _notes;
     private Dictionary<string, System.Action> _spells;
     private Dictionary<string, string> _keyToNote;
@@ -51,18 +53,24 @@ public class Player : MonoBehaviour
     {
         AudioManager.Instance.PlaySound(context.control.displayName);
         _notes.Enqueue(_keyToNote[context.control.displayName]);
+        string chords = string.Concat(_notes);
+        displayNotes.GetComponent<TMP_Text>().color = Color.white;
+        displayNotes.GetComponent<TMP_Text>().text = chords;
         if (_notes.Count == 3)
         {
-            string chords = string.Concat(_notes);
             Debug.Log("Chords: " + chords);
             _notes.Clear();
             if (_spells.ContainsKey(chords))
             {
+                displayNotes.GetComponent<TMP_Text>().color = Color.green;
                 AudioManager.Instance.PlaySound(chords + "Chords");
                 _spells[chords]();
             }
             else
+            {
+                displayNotes.GetComponent<TMP_Text>().color = Color.red;
                 SpellIncorrect();
+            }
         }
     }
 

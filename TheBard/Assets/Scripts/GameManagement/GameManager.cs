@@ -134,7 +134,7 @@ public class GameManager : MonoSingleton<GameManager>
         InGameObjects.Reset();
         GameSettings.Instance.Reset();
         if (levelId > 1)
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.25f);
         loadingGame = false;
         LoadGame();
     }
