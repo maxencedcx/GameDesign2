@@ -112,6 +112,9 @@ public class GameManager : MonoSingleton<GameManager>
         GameObject player = Instantiate(ResourcesManager.Instance.Get(Constants.Resources.playerPrefab), parent.transform);
         InGameObjects.setPlayer(player);
 
+        if (levelId == 5)
+            Instantiate(ResourcesManager.Instance.Get(Constants.Resources.enemyBardPrefab), parent.transform);
+
         foreach (EntitiesSettings es in GameSettings.Instance.entitiesSettings)
         {
             GameObject en = Instantiate(ResourcesManager.Instance.Get(es.PrefabType + Constants.Resources.suffixPrefab), parent.transform);
@@ -178,6 +181,16 @@ public class InGameObjects
             Allies.Remove(id);
         else if (type == EntityType.ENNEMY)
             Enemies.Remove(id);
+    }
+
+    public Dictionary<int, IEntity> getAllContraryEntityTypes(EntityType type)
+    {
+        return (type == EntityType.ALLY) ? (getAllEnemies()) : (getAllAllies());
+    }
+
+    public Dictionary<int, IEntity> getAllSimilarEntityTypes(EntityType type)
+    {
+        return (type == EntityType.ALLY) ? (getAllAllies()) : (getAllEnemies());
     }
 
     public Dictionary<int, IEntity> getAllAllies()

@@ -40,9 +40,7 @@ public class Entity : MonoBehaviour, IEntity
     private void Update()
     {
         if (stunnedFor > 0)
-        {
             stunnedFor = Mathf.Clamp(stunnedFor - Time.deltaTime, 0, stunnedFor);
-        }
         else if (Time.time - lastAttack >= attackSpeed)
         {
             lastAttack = Time.time;
@@ -129,6 +127,7 @@ public class Entity : MonoBehaviour, IEntity
 
     public void Init(EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities = null)
     {
+        this.lastAttack = Time.time;
         this.Type = type;
         this.maxHealth = health;
         this.attackDamages = damages;
@@ -144,7 +143,6 @@ public class Entity : MonoBehaviour, IEntity
         if (damage > 0)
             Health -= damage;
         StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.red, 0.5f, 0.1f));
-        //GetComponent<Animator>().Play("Knight_Attack");
     }
 
     public virtual void HealDamage(int heal)
@@ -152,7 +150,6 @@ public class Entity : MonoBehaviour, IEntity
         if (heal > 0)
             Health += heal;
         StartCoroutine(FlashObject(GetComponent<SpriteRenderer>(), Color.green, 0.5f, 0.1f));
-        //GetComponent<Animator>().Play("Knight_Attack");
     }
 
     protected virtual void OnHealthChange(int value)
@@ -199,14 +196,5 @@ public class Entity : MonoBehaviour, IEntity
     private void OnDestroy()
     {
         GameManager.Instance.InGameObjects.RemoveEntity(Id, Type);
-        /*if (GameManager.Instance != null && GameManager.Instance.activeRound != null && !GameManager.Instance.activeRound.isGameOver())
-        {
-            Health = 0;
-            GameManager.Instance.activeRound.removePlayer(Id);
-            if (Health <= 0)
-                AudioManager.Instance.PlaySound("regularDeath");
-            else
-                AudioManager.Instance.PlaySound("fallingDeath");
-        }*/
     }
 }
