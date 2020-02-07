@@ -13,17 +13,16 @@ public class GameManager : MonoSingleton<GameManager>
     public InGameObjects InGameObjects;
     public Dictionary<int, Vector3> slots = new Dictionary<int, Vector3>
     {
-        { 1, new Vector3(2, -1.5f, 0)},
-        { 2, new Vector3(2, 1.5f, 0)},
+        { 1, new Vector3(2, -2.5f, 0)},
+        { 2, new Vector3(2, -0.5f, 0)},
         { 3, new Vector3(4.5f, -3, 0)},
-        { 4, new Vector3(4.5f, 3, 0)}
+        { 4, new Vector3(4.5f, 0, 0)}
     };
 
     private void Awake() 
     {
         base.Awake();
 
-        Debug.Log("AwakaGameManager");
         _controls = new Controls();
     }
 

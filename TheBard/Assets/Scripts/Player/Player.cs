@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
         _spells.Add("LaDoMi", SpellTest);
         _spells.Add("SiReFa", DebuffAttackDamagesSpell);
         _spells.Add("MiSiRe", BuffAttackDamagesSpell);
-        //add chords and corresponding spells
 
         _keyToNote = new Dictionary<string, string>
         {

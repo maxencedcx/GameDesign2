@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 8583386007854927352}
   - component: {fileID: 7764572093340580320}
   - component: {fileID: 3846902457615467966}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Knight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -212,9 +212,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -103243349
+  m_SortingLayer: 2
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 8270733828a371c46b49f4f6324c51c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
