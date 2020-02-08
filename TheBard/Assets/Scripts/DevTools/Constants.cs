@@ -24,6 +24,8 @@
         public const string cowboyPrefab = "COWBOY" + suffixPrefab;
         public const string knightPrefab = "KNIGHT" + suffixPrefab;
         public const string enemyBardPrefab = "ENEMYBARD" + suffixPrefab;
+        public const string demonPrefab = "DEMON" + suffixPrefab;
+
 
         // SOUNDS
         public const string soundsPath = "Sounds/";
