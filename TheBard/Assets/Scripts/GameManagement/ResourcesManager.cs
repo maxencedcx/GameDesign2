@@ -8,6 +8,7 @@ public class ResourcesManager : MonoSingleton<ResourcesManager>
     [SerializeField] private GameObject cowboyPrefab;
     [SerializeField] private GameObject knightPrefab;
     [SerializeField] private GameObject enemyBardPrefab;
+    [SerializeField] private GameObject demonPrefab;
 
     private Dictionary<string, GameObject> objects;
 
@@ -27,6 +28,7 @@ public class ResourcesManager : MonoSingleton<ResourcesManager>
             { Constants.Resources.cowboyPrefab, cowboyPrefab },
             { Constants.Resources.knightPrefab, knightPrefab },
             { Constants.Resources.enemyBardPrefab, enemyBardPrefab },
+            { Constants.Resources.demonPrefab, demonPrefab },
         };
     }
 
