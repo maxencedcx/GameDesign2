@@ -20,13 +20,13 @@ public enum Immunity
 
 public interface IEntity
 {
-    void Init(EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities = null);
+    void Init(EntityType type, int health, int damages, float attackspeed, List<Immunity> immunities = null);
     void TakeDamage(int damage);
     void HealDamage(int heal);
     void debuffStun(int duration);
-    void debuffAttackSpeed(double value, int duration);
+    void debuffAttackSpeed(float value, int duration);
     void debuffAttackDamages(int value, int duration);
-    void buffAttackSpeed(double value, int duration);
+    void buffAttackSpeed(float value, int duration);
     void buffAttackDamages(int value, int duration);
     int getId();
     bool getIsDead();

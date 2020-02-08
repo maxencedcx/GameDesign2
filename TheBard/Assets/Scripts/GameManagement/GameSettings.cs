@@ -33,7 +33,7 @@ public class GameSettings : MonoSingleton<GameSettings>
                 for (int i = 5; i < entitySetting.Length; i++)
                     immunities.Add((Immunity)System.Enum.Parse(typeof(Immunity), entitySetting[i]));
 
-            entitiesSettings.Add(new EntitiesSettings(entitySetting[0], (EntityType)System.Enum.Parse(typeof(EntityType), entitySetting[1]), int.Parse(entitySetting[2]), int.Parse(entitySetting[3]), double.Parse(entitySetting[4]), immunities));
+            entitiesSettings.Add(new EntitiesSettings(entitySetting[0], (EntityType)System.Enum.Parse(typeof(EntityType), entitySetting[1]), int.Parse(entitySetting[2]), int.Parse(entitySetting[3]), float.Parse(entitySetting[4]), immunities));
         }
 
         file.Close();
@@ -47,10 +47,10 @@ public struct EntitiesSettings
     public EntityType Type;
     public int Health;
     public int Damages;
-    public double AttackSpeed;
+    public float AttackSpeed;
     public List<Immunity> Immunities;
 
-    public EntitiesSettings(string prefabtype, EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities)
+    public EntitiesSettings(string prefabtype, EntityType type, int health, int damages, float attackspeed, List<Immunity> immunities)
     {
         PrefabType = prefabtype;
         Type = type;

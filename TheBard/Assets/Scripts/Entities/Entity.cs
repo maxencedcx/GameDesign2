@@ -7,7 +7,7 @@ public class Entity : MonoBehaviour, IEntity
 {
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected EntityType Type = EntityType.DEFAULT;
-    [SerializeField] protected double attackSpeed = 1;
+    [SerializeField] protected float attackSpeed = 1;
     [SerializeField] protected int attackDamages = 10;
     [SerializeField] protected float stunnedFor = 0;
     [SerializeField] protected Slider HealthBar;
@@ -101,7 +101,7 @@ public class Entity : MonoBehaviour, IEntity
         attackDamages -= value;
     }
 
-    public void debuffAttackSpeed(double value, int duration)
+    public void debuffAttackSpeed(float value, int duration)
     {
         //change attack speed
         if (Immunities != null && Immunities.Contains(Immunity.DEBUFFAS))
@@ -110,30 +110,29 @@ public class Entity : MonoBehaviour, IEntity
         StartCoroutine(coroutineDebuffAttackSpeed(value, duration));
     }
 
-    IEnumerator coroutineDebuffAttackSpeed(double value, int duration)
+    IEnumerator coroutineDebuffAttackSpeed(float value, int duration)
     {
         attackSpeed += value;
         yield return new WaitForSeconds(duration);
         attackSpeed -= value;
     }
 
-    public void buffAttackSpeed(double value, int duration)
+    public void buffAttackSpeed(float value, int duration)
     {
         //change attack speed
-        if (attackSpeed <= 0.5)
-            return;
+        value = Mathf.Clamp(value - attackSpeed, -100, -0.5f) + attackSpeed;
         OnBuff();
         StartCoroutine(coroutineBuffAttackSpeed(value, duration));
     }
 
-    IEnumerator coroutineBuffAttackSpeed(double value, int duration)
+    IEnumerator coroutineBuffAttackSpeed(float value, int duration)
     {
         attackSpeed -= value;
         yield return new WaitForSeconds(duration);
         attackSpeed += value;
     }
 
-    public void Init(EntityType type, int health, int damages, double attackspeed, List<Immunity> immunities = null)
+    public void Init(EntityType type, int health, int damages, float attackspeed, List<Immunity> immunities = null)
     {
         this.lastAttack = Time.time;
         this.Type = type;
