@@ -20,6 +20,8 @@ public class AudioManager : MonoSingleton<AudioManager>
     [SerializeField] private AudioClip SiReFaChords;
     [SerializeField] private AudioClip MiSiReChords;
     [SerializeField] private AudioClip FailureJingle;
+    [SerializeField] private AudioClip VictoryJingle;
+    [SerializeField] private AudioClip DefeatJingle;
     private Dictionary<string, AudioClip> clips;
     private AudioSource audioSource;
 
@@ -51,6 +53,8 @@ public class AudioManager : MonoSingleton<AudioManager>
             { "SiReFaChords", SiReFaChords },
             { "MiSiReChords", MiSiReChords },
             { "FailureJingle", FailureJingle },
+            { "VictoryJingle", VictoryJingle },
+            { "DefeatJingle", DefeatJingle },
         };
 
         audioSource = gameObject.GetComponent<AudioSource>();

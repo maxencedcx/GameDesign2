@@ -147,6 +147,33 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""InMenu"",
+            ""id"": ""0fc6c08e-2367-4350-b398-1c818194ba03"",
+            ""actions"": [
+                {
+                    ""name"": ""AnyKey"",
+                    ""type"": ""Button"",
+                    ""id"": ""693d4407-2af8-4bbe-a01b-c5eb3afa25fa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e96bb143-5e31-448e-b42a-213eab04f3b0"",
+                    ""path"": ""<Keyboard>/anyKey"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AnyKey"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -155,6 +182,9 @@ public class @Controls : IInputActionCollection, IDisposable
         m_InGameBard = asset.FindActionMap("InGameBard", throwIfNotFound: true);
         m_InGameBard_PressKey = m_InGameBard.FindAction("PressKey", throwIfNotFound: true);
         m_InGameBard_Pause = m_InGameBard.FindAction("Pause", throwIfNotFound: true);
+        // InMenu
+        m_InMenu = asset.FindActionMap("InMenu", throwIfNotFound: true);
+        m_InMenu_AnyKey = m_InMenu.FindAction("AnyKey", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -241,9 +271,46 @@ public class @Controls : IInputActionCollection, IDisposable
         }
     }
     public InGameBardActions @InGameBard => new InGameBardActions(this);
+
+    // InMenu
+    private readonly InputActionMap m_InMenu;
+    private IInMenuActions m_InMenuActionsCallbackInterface;
+    private readonly InputAction m_InMenu_AnyKey;
+    public struct InMenuActions
+    {
+        private @Controls m_Wrapper;
+        public InMenuActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @AnyKey => m_Wrapper.m_InMenu_AnyKey;
+        public InputActionMap Get() { return m_Wrapper.m_InMenu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(InMenuActions set) { return set.Get(); }
+        public void SetCallbacks(IInMenuActions instance)
+        {
+            if (m_Wrapper.m_InMenuActionsCallbackInterface != null)
+            {
+                @AnyKey.started -= m_Wrapper.m_InMenuActionsCallbackInterface.OnAnyKey;
+                @AnyKey.performed -= m_Wrapper.m_InMenuActionsCallbackInterface.OnAnyKey;
+                @AnyKey.canceled -= m_Wrapper.m_InMenuActionsCallbackInterface.OnAnyKey;
+            }
+            m_Wrapper.m_InMenuActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @AnyKey.started += instance.OnAnyKey;
+                @AnyKey.performed += instance.OnAnyKey;
+                @AnyKey.canceled += instance.OnAnyKey;
+            }
+        }
+    }
+    public InMenuActions @InMenu => new InMenuActions(this);
     public interface IInGameBardActions
     {
         void OnPressKey(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
+    }
+    public interface IInMenuActions
+    {
+        void OnAnyKey(InputAction.CallbackContext context);
     }
 }

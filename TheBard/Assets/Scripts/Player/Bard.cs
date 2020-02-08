@@ -16,7 +16,7 @@ public class Bard : MonoBehaviour
         _spells.Add("DoMiSol", BuffHealSpell);
         _spells.Add("ReFaLa", DebuffStunSpell);
         _spells.Add("MiSolSi", DebuffAttackspeedSpell);
-        _spells.Add("FaLaDo", BuffAttackDamagesSpell);
+        _spells.Add("FaLaDo", BuffAttackSpeedSpell);
         _spells.Add("SolSiRe", SpellTest);
         _spells.Add("LaDoMi", SpellTest);
         _spells.Add("SiReFa", DebuffAttackDamagesSpell);
@@ -44,7 +44,7 @@ public class Bard : MonoBehaviour
     protected void DebuffAttackspeedSpell()
     {
         foreach (IEntity entity in GameManager.Instance.InGameObjects.getAllContraryEntityTypes(type).Values)
-            entity.debuffAttackSpeed(0.2, 5);
+            entity.debuffAttackSpeed(0.5, 5);
     }
 
     protected void DebuffAttackDamagesSpell()
@@ -56,13 +56,13 @@ public class Bard : MonoBehaviour
     protected void BuffHealSpell()
     {
         foreach (IEntity entity in GameManager.Instance.InGameObjects.getAllSimilarEntityTypes(type).Values)
-            entity.HealDamage(10);
+            entity.HealDamage(15);
     }
 
-    protected void BuffAttackspeedSpell()
+    protected void BuffAttackSpeedSpell()
     {
         foreach (IEntity entity in GameManager.Instance.InGameObjects.getAllSimilarEntityTypes(type).Values)
-            entity.buffAttackSpeed(0.2, 5);
+            entity.buffAttackSpeed(0.5, 5);
     }
 
     protected void BuffAttackDamagesSpell()
