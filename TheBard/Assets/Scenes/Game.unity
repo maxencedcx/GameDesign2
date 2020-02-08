@@ -1029,6 +1029,8 @@ MonoBehaviour:
   SiReFaChords: {fileID: 8300000, guid: e95dfea5eb30823408efe642d7a5c8cd, type: 3}
   MiSiReChords: {fileID: 8300000, guid: d03262402ddd73a4a90d4df38d1c883c, type: 3}
   FailureJingle: {fileID: 8300000, guid: a0b2cbd0b2d91a44c9e071ce74a50668, type: 3}
+  VictoryJingle: {fileID: 8300000, guid: 90ce86f727f70604093b6206fdf84835, type: 3}
+  DefeatJingle: {fileID: 8300000, guid: ca301256cb1cd0842b5cb38a8c3a0abd, type: 3}
 --- !u!4 &2140222433
 Transform:
   m_ObjectHideFlags: 0
@@ -1053,7 +1055,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b2eb868cad2937441a2ded4992beb84a, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.198
   m_Pitch: 1

@@ -134,6 +134,33 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "InMenu",
+            "id": "0fc6c08e-2367-4350-b398-1c818194ba03",
+            "actions": [
+                {
+                    "name": "AnyKey",
+                    "type": "Button",
+                    "id": "693d4407-2af8-4bbe-a01b-c5eb3afa25fa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e96bb143-5e31-448e-b42a-213eab04f3b0",
+                    "path": "<Keyboard>/anyKey",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AnyKey",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

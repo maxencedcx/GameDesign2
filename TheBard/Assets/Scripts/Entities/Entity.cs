@@ -178,11 +178,12 @@ public class Entity : MonoBehaviour, IEntity
 
     protected virtual void Die()
     {
-        Debug.Log(Type.ToString() + Id + " -- DEAD");
         gameObject.transform.Rotate(Vector3.forward * 90);
         HealthBar.gameObject.SetActive(false);
         gameObject.GetComponent<Animator>().enabled = false;
         isDead = true;
+        GameManager.Instance.InGameObjects.DeadEntities.Add(gameObject);
+        GameManager.Instance.InGameObjects.RemoveEntity(Id, Type);
     }
 
     IEnumerator FlashObject(SpriteRenderer toFlash, Color flashColor, float flashTime, float flashSpeed)
