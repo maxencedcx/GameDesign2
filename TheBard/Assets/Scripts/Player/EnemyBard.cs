@@ -19,7 +19,7 @@ public class EnemyBard : Bard
         {
             lastAttack = Time.time;
             Enumerable.ToList(_spells.Values)[Random.Range(0, _spells.Count)]();
-            if (attackSpeed > 1)
+            if (attackSpeed > 0.5f)
                 attackSpeed -= 0.1f;
         }
     }
